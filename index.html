@@ -1,3 +1,15 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Küche">
+<meta name="format-detection" content="telephone=no">
 <title>Küchenzettel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +24,10 @@
   color-scheme:light;
 }
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;background:#fff;height:100%}
+body{margin:0;min-height:100%;overflow-x:hidden}
+img{max-width:100%}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
 body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,rgba(0,0,0,0) 58%,rgba(0,0,0,.06) 100%)}
 body.lock{overflow:hidden}
@@ -20,7 +36,7 @@ button{cursor:pointer}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px}
 h1,h2,h3{margin:0;line-height:1.2;text-wrap:balance;letter-spacing:-.02em}
 
-.wrap{max-width:640px;margin:0 auto;padding-inline:20px;padding-block:28px 120px}
+.wrap{max-width:640px;margin:0 auto;padding-inline:max(20px,env(safe-area-inset-left)) max(20px,env(safe-area-inset-right));padding-top:max(28px,calc(env(safe-area-inset-top) + 14px));padding-bottom:120px}
 .top h1{font-size:30px;font-weight:700}
 .top .sub{margin:4px 0 0;color:var(--muted);font-size:15px}
 main{display:flex;flex-direction:column;gap:28px;margin-top:24px}
@@ -145,17 +161,13 @@ main{display:flex;flex-direction:column;gap:28px;margin-top:24px}
 .vnote{margin:0;color:var(--muted);font-size:14px}
 .vnote a{color:var(--red)}
 
-.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);padding:6px 12px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);padding:6px max(12px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left))}
 .tabs-in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
 .tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:10px;border:0;background:none;color:var(--muted);font-size:12px;font-weight:600;position:relative;min-height:54px}
 .tab svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tab[aria-current="true"]{color:var(--red)}
 .badge{position:absolute;top:3px;left:calc(50% + 6px);background:var(--red);color:#fff;border-radius:999px;font-size:11px;font-weight:700;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 5px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px;z-index:40;max-width:calc(100% - 32px);text-align:center;box-shadow:var(--shadow)}
-.top{position:relative;padding-right:56px}
-.gear{position:absolute;top:2px;right:0;width:44px;height:44px;border-radius:12px;border:1px solid var(--line2);background:#fff;display:grid;place-items:center;color:var(--ink)}
-.gear svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.gear .dot{position:absolute;top:7px;right:7px;width:10px;height:10px;border-radius:50%;background:var(--red);border:2px solid #fff}
 .phead{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:calc(18px + env(safe-area-inset-top,0px)) 20px 0}
 .phead h2{font-size:22px;font-weight:700}
 .ptext{margin:0;color:var(--muted);font-size:15px}
@@ -170,6 +182,8 @@ main{display:flex;flex-direction:column;gap:28px;margin-top:24px}
 .how ol{margin:10px 0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;color:var(--muted)}
 .how pre{margin:10px 0;padding:12px;background:var(--soft);border-radius:10px;font-size:12px;overflow-x:auto;white-space:pre}
 </style>
+</head>
+<body>
 
 <div class="wrap" id="app">
   <header class="top" id="hdr"></header>
@@ -265,7 +279,7 @@ function load(){
 }
 var state=load();
 var ui={tab:'vorrat',cat:'alle',addOpen:false,recipe:null,panel:null,urlDraft:''};
-try{var h=(location.hash||'').replace('#','');if(h==='einkauf'||h==='kochen'||h==='vorrat')ui.tab=h;}catch(e){}
+try{var h=(location.hash||'').replace('#','');if(h==='einkauf'||h==='kochen'||h==='vorrat')ui.tab=h;if(h==='einrichten')ui.panel='sync';}catch(e){}
 
 /* ---------- Gemeinsamer Speicher (Firebase Realtime Database über REST) ---------- */
 /* Die Daten liegen immer zuerst im Browser. Ist ein Gerät verbunden, werden sie zusätzlich unter
@@ -642,9 +656,7 @@ function greeting(){var h=new Date().getHours();return h<11?'Guten Morgen':h<14?
 function renderHeader(){
   var inHouse=state.pantry.filter(function(p){return p.qty>0;}).length;
   var open=state.list.filter(function(i){return !i.done;}).length;
-  var dot=(!sync.db||sync.err)?'<i class="dot"></i>':'';
-  document.getElementById('hdr').innerHTML='<h1>Meine Küche</h1><p class="sub">'+inHouse+' Artikel im Haus · '+open+' auf der Einkaufsliste</p>'+
-    '<button class="gear" data-act="open-sync" aria-label="Geräte verbinden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.6L4 8M4 4v4h4M4 13a8 8 0 0 0 14.3 4.6L20 16m0 4v-4h-4"/></svg>'+dot+'</button>';
+  document.getElementById('hdr').innerHTML='<h1>Meine Küche</h1><p class="sub">'+inHouse+' Artikel im Haus · '+open+' auf der Einkaufsliste</p>';
 }
 function renderTabs(){
   var open=state.list.filter(function(i){return !i.done;}).length;
@@ -841,7 +853,6 @@ function act(a,d){
       save();toast(n+' Artikel verstaut');break;
     case 'open':ui.recipe=d.id;break;
     case 'close':ui.recipe=null;ui.panel=null;break;
-    case 'open-sync':ui.panel='sync';break;
     case 'sync-connect':ui.urlDraft=(document.getElementById('sy-url')||{}).value||'';connect(ui.urlDraft);break;
     case 'sync-join':joinPending();break;
     case 'sync-cancel':sync.pending=null;sync.msg='';ui.panel=null;break;
@@ -879,8 +890,11 @@ document.addEventListener('submit',function(e){
   }
 });
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&(ui.recipe||ui.panel)){ui.recipe=null;ui.panel=null;render();}});
+window.addEventListener('hashchange',function(){if(location.hash==='#einrichten'){ui.panel='sync';render();}});
 loadApi();
 render();
 pull();
 })();
 </script>
+</body>
+</html>
